@@ -1,34 +1,35 @@
 import pandas as pd
+from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 import mysql.connector
 
-# Connect to MySQL
-connection = mysql.connector.connect(
-    host='localhost',
-    user='your_username',  # Replace with your MySQL username
-    password='your_password',  # Replace with your MySQL password
-    database='route_planning'
+# Connect to MySQL and fetch data
+db_connection = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="password",
+    database="traffic_db"
 )
 
-# Load data from MySQL into DataFrame
-query = "SELECT * FROM routes"
-data = pd.read_sql(query, connection)
+query = "SELECT * FROM traffic_data"
+df = pd.read_sql(query, con=db_connection)
 
-# Convert categorical variables to dummy/indicator variables
-data = pd.get_dummies(data, columns=['traffic', 'weather'], drop_first=True)
+# Preprocess data
+X = df[['hour_12_1AM', 'hour_1_2AM', 'hour_2_3AM', 'hour_3_4AM', 'hour_4_5AM', 'hour_5_6AM', 'hour_6_7AM', 'hour_7_8AM']]
+y = df['hour_8_9AM']
 
-# Separate features and target variable
-X = data.drop(columns=['id', 'distance'])  # Exclude 'id' and 'distance' columns
-y = data['distance']
+# Split into training and testing datasets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-# Fit the model
+# Create and train the model
 model = LinearRegression()
-model.fit(X, y)
+model.fit(X_train, y_train)
 
-# Example prediction
-# Replace [1, 0, 1, 0] with appropriate values based on your encoding
-predicted_distance = model.predict([[1, 0, 1, 0]])  # Example input
-print(f"Predicted distance: {predicted_distance[0]}")
+# Predict future traffic
+y_pred = model.predict(X_test)
 
-# Close the connection
-connection.close()
+# Evaluate the model
+from sklearn.metrics import mean_squared_error
+mse = mean_squared_error(y_test, y_pred)
+print(f"Mean Squared Error: {mse}")
+

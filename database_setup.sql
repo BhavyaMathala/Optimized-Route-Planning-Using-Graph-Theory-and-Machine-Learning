@@ -32,7 +32,7 @@ CREATE TABLE traffic_data (
     hour_11_12AM INT
 );
 
-LOAD DATA INFILE 'path.csv'
+LOAD DATA INFILE 'Traffic_data.csv'
 INTO TABLE traffic_data
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'

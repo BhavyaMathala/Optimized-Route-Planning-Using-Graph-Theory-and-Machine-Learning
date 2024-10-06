@@ -1,5 +1,5 @@
 
-**# Optimized Route Planning Using Graph Theory and Machine Learning**
+**####### Optimized Route Planning Using Graph Theory and Machine Learning**
 
 **## Project Overview**
 This project aims to optimize route planning by calculating the shortest paths between cities using graph theory (Dijkstra’s algorithm) and predicting travel times using a machine learning model. The project combines C++ for graph-based pathfinding and Python for machine learning predictions, with MySQL used to store city, route, and traffic data.

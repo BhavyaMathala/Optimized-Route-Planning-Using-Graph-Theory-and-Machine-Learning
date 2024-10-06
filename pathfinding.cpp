@@ -47,15 +47,4 @@ public:
     }
 };
 
-int main() {
-    Graph g;
-    g.addEdge("CityA", "CityB", 120);
-    g.addEdge("CityA", "CityC", 150);
-    g.addEdge("CityB", "CityD", 200);
-    g.addEdge("CityC", "CityD", 100);
-    g.addEdge("CityD", "CityE", 80);
 
-    g.dijkstra("CityA");
-
-    return 0;
-}

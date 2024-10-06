@@ -1,50 +1,89 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <unordered_map>
-#include <limits>
+#include <map>
+#include <climits>
+#include <mysql/mysql.h>
 
 using namespace std;
 
+struct Edge {
+    int to, weight;
+};
+
+// Graph stored as an adjacency list
 class Graph {
 public:
-    unordered_map<string, vector<pair<string, int>>> adj; // adjacency list
-
-    void addEdge(const string& u, const string& v, int weight) {
-        adj[u].push_back(make_pair(v, weight));
-        adj[v].push_back(make_pair(u, weight)); // for undirected graph
+    map<int, vector<Edge>> adjList;
+    
+    void addEdge(int from, int to, int weight) {
+        adjList[from].push_back({to, weight});
+        adjList[to].push_back({from, weight}); // Assuming it's undirected
     }
-
-    void dijkstra(const string& start) {
-        unordered_map<string, int> dist;
-        for (const auto& pair : adj) {
-            dist[pair.first] = numeric_limits<int>::max();
-        }
-        dist[start] = 0;
-
-        priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>> pq;
-        pq.push(make_pair(0, start));
-
+    
+    vector<int> dijkstra(int source, int n) {
+        vector<int> dist(n, INT_MAX);
+        dist[source] = 0;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+        pq.push({0, source});
+        
         while (!pq.empty()) {
-            string u = pq.top().second;
+            int u = pq.top().second;
             pq.pop();
-
-            for (const auto& neighbor : adj[u]) {
-                string v = neighbor.first;
-                int weight = neighbor.second;
-
+            
+            for (auto& edge : adjList[u]) {
+                int v = edge.to;
+                int weight = edge.weight;
                 if (dist[u] + weight < dist[v]) {
                     dist[v] = dist[u] + weight;
-                    pq.push(make_pair(dist[v], v));
+                    pq.push({dist[v], v});
                 }
             }
         }
-
-        // Print distances
-        for (const auto& pair : dist) {
-            cout << "Distance from " << start << " to " << pair.first << " is " << pair.second << endl;
-        }
+        
+        return dist;
     }
 };
 
+int getTrafficWeight(string from, string to, int hour) {
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+    int traffic = INT_MAX;
+    
+    conn = mysql_init(NULL);
+    if (conn == NULL) {
+        cout << "mysql_init() failed" << endl;
+        return traffic;
+    }
+    
+    if (mysql_real_connect(conn, "localhost", "root", "password", "traffic_db", 0, NULL, 0) == NULL) {
+        cout << "mysql_real_connect() failed" << endl;
+        mysql_close(conn);
+        return traffic;
+    }
+    
+    string query = "SELECT `hour_" + to_string(hour) + "` FROM traffic_data WHERE from_location = '" + from + "' AND to_location = '" + to + "'";
+    
+    if (mysql_query(conn, query.c_str())) {
+        cout << "SELECT failed: " << mysql_error(conn) << endl;
+        mysql_close(conn);
+        return traffic;
+    }
+    
+    res = mysql_store_result(conn);
+    if (res == NULL) {
+        cout << "mysql_store_result() failed: " << mysql_error(conn) << endl;
+    } else {
+        row = mysql_fetch_row(res);
+        if (row != NULL) {
+            traffic = stoi(row[0]);
+        }
+    }
+    
+    mysql_free_result(res);
+    mysql_close(conn);
+    
+    return traffic;
+}
 

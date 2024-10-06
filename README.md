@@ -6,26 +6,39 @@ This project aims to optimize route planning by calculating the shortest paths b
 
 ## Features
 - **Graph Theory**: Use Dijkstra’s algorithm to find the shortest paths between cities.
+- 
 - **Machine Learning**: Predict travel times based on traffic, weather, and other factors.
+- 
 - **MySQL Integration**: Store and query city and route data efficiently.
 
 
 Technologies Used
 
 Languages: C++, Python
+
 Database: MySQL
+
 Libraries:
+
   Python: sklearn, pandas, joblib, requests
+  
 Tools:
+
   MySQL for data storage
+  
   C++ compiler (e.g., g++) for graph algorithms
+  
   Python 3.6+ for machine learning
 
 
 Prerequisites
+
   C++ compiler (e.g., g++)
+
   Python 3.6+
+  
   MySQL Server
+  
   Required Python libraries: Install via pip
 
 "pip install pandas scikit-learn joblib requests"

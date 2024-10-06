@@ -57,7 +57,7 @@ void dijkstra(const vector<vector<string>>& trafficData, int start) {
 }
 
 int main() {
-    vector<vector<string>> trafficData = loadTrafficData("../Dataset/Traffic_Data.csv");
+    vector<vector<string>> trafficData = loadTrafficData("../Dataset/Traffic_data.csv");
     dijkstra(trafficData, 0); // Assuming starting node is the first entry
     return 0;
 }

@@ -1,26 +1,26 @@
 
-# Optimized Route Planning Using Graph Theory and Machine Learning
+**# Optimized Route Planning Using Graph Theory and Machine Learning**
 
-## Project Overview
+**## Project Overview**
 This project aims to optimize route planning by calculating the shortest paths between cities using graph theory (Dijkstra’s algorithm) and predicting travel times using a machine learning model. The project combines C++ for graph-based pathfinding and Python for machine learning predictions, with MySQL used to store city, route, and traffic data.
 
-## Features
+**### Features**
 - **Graph Theory**: Use Dijkstra’s algorithm to find the shortest paths between cities.
 - **Machine Learning**: Predict travel times based on traffic, weather, and other factors.
 - **MySQL Integration**: Store and query city and route data efficiently.
 
 
-Technologies Used
+###**Technologies Used**
 
 Languages: C++, Python
 
 Database: MySQL
 
-Libraries:
+**Libraries:**
 
   1.Python: sklearn, pandas, joblib, requests
   
-Tools:
+###**Tools:**
 
   1.MySQL for data storage
   
@@ -29,7 +29,7 @@ Tools:
    3. Python 3.6+ for machine learning
 
 
-Prerequisites
+###**Prerequisites**
 
    1. C++ compiler (e.g., g++)
 
@@ -41,7 +41,7 @@ Prerequisites
 
             "pip install pandas scikit-learn joblib requests"
 
-Database Setup
+###**Database Setup**
 
   1.Install MySQL and set up a new database.
     
@@ -51,7 +51,7 @@ Database Setup
 
   3.Populate the tables with your own data or use the sample dataset.
 
-C++ Pathfinding (Dijkstra's Algorithm)
+###**C++ Pathfinding (Dijkstra's Algorithm)**
 
   1.Navigate to the C++_Pathfinding/ directory.
   
@@ -63,7 +63,7 @@ C++ Pathfinding (Dijkstra's Algorithm)
             "./pathfinding"
   4.The program will compute the shortest paths between cities based on predefined edges.
 
-Python Machine Learning Prediction
+**Python Machine Learning Prediction**
 
   1.Navigate to the Python_ML/ directory.
   

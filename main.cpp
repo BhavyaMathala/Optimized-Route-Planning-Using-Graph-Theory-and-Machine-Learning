@@ -1,24 +1,47 @@
-// cpp/main.cpp
+// main.cpp
 
-#include <iostream>
 #include "route_planning.h"
+#include "crow_all.h" // Include the Crow library
+#include <json/json.h> // Include a JSON library for response formatting
+
+// Function to convert a location to JSON
+Json::Value locationToJson(const Location& loc) {
+    Json::Value jsonLoc;
+    jsonLoc["name"] = loc.name;
+    jsonLoc["latitude"] = loc.latitude;
+    jsonLoc["longitude"] = loc.longitude;
+    return jsonLoc;
+}
 
 int main() {
     RoutePlanner planner;
 
-    // Add some locations
-    planner.addLocation(Location("A", 10.0, 20.0));
-    planner.addLocation(Location("B", 30.0, 40.0));
-    planner.addLocation(Location("C", 50.0, 60.0));
+    // Add example locations
+    planner.addLocation(Location("Beach Street", 40.1234, -74.5678));
+    planner.addLocation(Location("Union Place", 40.4321, -74.8765));
+    planner.addLocation(Location("Market Square", 40.5432, -74.6789));
 
-    // Find optimal route from A to C
-    std::vector<Location> optimalRoute = planner.findOptimalRoute(Location("A", 10.0, 20.0), Location("C", 50.0, 60.0));
+    crow::SimpleApp app; // Create a Crow application
 
-    // Print the optimal route
-    std::cout << "Optimal Route:" << std::endl;
-    for (const Location& loc : optimalRoute) {
-        std::cout << loc.name << " (" << loc.latitude << ", " << loc.longitude << ")" << std::endl;
-    }
+    // Define the API endpoint for finding an optimal route
+    CROW_ROUTE(app, "/find_route") // Endpoint for finding the route
+    .methods("POST"_method)([&planner](const crow::request& req) {
+        auto json = Json::Value();
+        std::string startName = req.body; // Extract start location name from request body
+        std::string endName = "Union Place"; // Set end location for this example
 
-    return 0;
+        Location start(startName, 40.1234, -74.5678); // Sample coordinates
+        Location end(endName, 40.4321, -74.8765);
+
+        std::vector<Location> route = planner.findOptimalRoute(start, end);
+
+        Json::Value responseJson;
+        for (const auto& loc : route) {
+            responseJson.append(locationToJson(loc));
+        }
+
+        return crow::response{responseJson.toStyledString()}; // Return JSON response
+    });
+
+    app.port(8080).multithreaded().run(); // Run the app on port 8080
 }

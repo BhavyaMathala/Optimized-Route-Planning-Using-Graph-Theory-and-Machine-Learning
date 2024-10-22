@@ -10,6 +10,9 @@ X = data[['hour', 'day_of_week']].values
 y = data['traffic_volume'].values
 
 # Train model
+from sklearn.model_selection import train_test_split
+X,X_test,y,y_test=train_test_split(X,y,test_size=0.3,random_state=10)
+
 model = LinearRegression()
 model.fit(X, y)
 

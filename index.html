@@ -1,0 +1,34 @@
+
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Planner</title>
+</head>
+<body>
+    <h1>Optimized Route Planner</h1>
+    <form id="routeForm">
+        <label for="start">Start Location:</label>
+        <input type="text" id="start" name="start" required>
+        <label for="end">End Location:</label>
+        <input type="text" id="end" name="end" required>
+        <button type="submit">Get Route</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('routeForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/route', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            document.getElementById('result').innerText = 'Optimal Route: ' + data.route;
+        };
+    </script>
+</body>
+</html>

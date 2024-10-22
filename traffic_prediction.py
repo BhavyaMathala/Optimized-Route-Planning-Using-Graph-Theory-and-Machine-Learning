@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 
-# Assuming 'data' is your DataFrame
+data = pd.read_csv('traffic_data.csv')
 
 # Extract 'day_of_week' from the 'Date' column
 data['day_of_week'] = pd.to_datetime(data['Date']).dt.dayofweek
